@@ -19,7 +19,7 @@ Modern Streamlit-based chatbot interface.
 
 ---
 
-# 7. Challenges Faced
+# Challenges Faced
 
 - Managing Streamlit session state.
 - Handling multi-session memory.
@@ -28,7 +28,7 @@ Modern Streamlit-based chatbot interface.
 
 ---
 
-# 8. Future Scope
+# Future Scope
 
 Future enhancements may include:
 
@@ -42,7 +42,7 @@ Future enhancements may include:
 
 ---
 
-# 9. Conclusion
+# Conclusion
 
 EchoMind AI successfully demonstrates the implementation of a personalized multi-session AI assistant using Machine Learning and NLP concepts.
 
