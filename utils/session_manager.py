@@ -37,16 +37,29 @@ def load_sessions():
 
         if file_name.endswith(".json"):
 
-            session_id = file_name.replace(".json", "")
+            session_id = file_name.replace(
+                ".json",
+                ""
+            )
 
             file_path = os.path.join(
                 SESSIONS_FOLDER,
                 file_name
             )
 
-            with open(file_path, "r") as file:
+            try:
 
-                sessions[session_id] = json.load(file)
+                with open(file_path, "r") as file:
+
+                    sessions[session_id] = json.load(
+                        file
+                    )
+
+            except Exception:
+
+                print(
+                    f"Skipping corrupted session: {file_name}"
+                )
 
     return sessions
 

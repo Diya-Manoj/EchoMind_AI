@@ -1,6 +1,6 @@
 import streamlit as st
 import uuid
-
+from utils.response_engine import generate_response
 from utils.image_generator import generate_image
 from utils.personalization import extract_preferences
 from utils.intent_detector import predict_intent
@@ -10,7 +10,6 @@ from utils.session_manager import (
     load_sessions,
     delete_session
 )
-from utils.response_engine import generate_response
 
 # -----------------------------------
 # PAGE CONFIG
@@ -102,14 +101,24 @@ session_titles = {
 # SESSION SELECTOR
 # -----------------------------------
 
+session_keys = list(session_titles.keys())
+
+selected_index = session_keys.index(
+    st.session_state.current_session
+)
+
 selected_session = st.sidebar.radio(
     "Select Session",
-    list(session_titles.keys()),
+    session_keys,
+    index=selected_index,
     format_func=lambda x: session_titles[x]
 )
 
-st.session_state.current_session = selected_session
+if selected_session != st.session_state.current_session:
 
+    st.session_state.current_session = selected_session
+
+    st.rerun()
 # -----------------------------------
 # DELETE SESSION
 # -----------------------------------
@@ -163,11 +172,16 @@ for chat in current_chat:
 
         # Image Messages
         if "image" in chat:
-            st.image(
-                chat["image"],
-                caption="🖼️ AI Generated Image",
-                use_container_width=True
-            )
+            try:
+                st.image(
+                    chat["image"],
+                    caption="AI Generated Image",
+                    use_container_width=True
+                )
+            except:
+                st.warning(
+                    "Image could not be loaded."
+                )
 
 # -----------------------------------
 # DISPLAY GENERATED FILE
@@ -207,7 +221,11 @@ if user_input:
 
     if current_session_data["title"] == "New Chat":
 
-        generated_title = user_input[:30]
+        generated_title = (
+            user_input[:30] + "..."
+            if len(user_input) > 30
+            else user_input
+        )
 
         current_session_data["title"] = generated_title
 
@@ -242,7 +260,8 @@ if user_input:
 
     bot_response = generate_response(
         intent,
-        user_preferences
+        user_preferences,
+        user_input
     )
     
     # Reset generated file
@@ -285,10 +304,7 @@ if user_input:
 
     if intent == "file_request":
 
-        topic = user_input.replace(
-            "generate notes on",
-            ""
-        ).strip()
+        topic = user_input.strip()
 
         topic_display = (
             topic.upper()

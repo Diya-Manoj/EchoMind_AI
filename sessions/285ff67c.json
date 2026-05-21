@@ -1,0 +1,14 @@
+{
+    "title": "motivate me",
+    "messages": [
+        {
+            "role": "user",
+            "message": "motivate me"
+        },
+        {
+            "role": "assistant",
+            "message": "Progress may feel slow sometimes, but consistency compounds over time. Keep building one step at a time \ud83d\ude80"
+        }
+    ],
+    "generated_file": null
+}
